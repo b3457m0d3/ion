@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en" data-framework="backbonejs">
+	<head>
+		<meta charset="utf-8">
+		<title>Backbone.js + RequireJS + i0n</title>
+		<link rel="stylesheet" href="css/bootstrap.css">
+        <style>
+            .viewPort { 
+                position:relative;
+                overflow-x:hidden;
+                height: 400px; 
+                width: 600px!important;
+                border:1px solid #000; 
+            }
+            #index {background: #ddd;}
+            #editor {background: #14c96f;}
+            .page {
+                position: absolute;
+                top: 0px;
+                right: 0px;
+                bottom: 0;
+            }
+        </style>
+	</head>
+	<body>
+		<div class="viewPort"></div>
+		<script data-main="js/main" src="js/ion/Library/require.js"></script>
+        <script type="template" id="layout1">
+            <div class="container">
+                <div class="jumbotron"></div>
+                <div class="row">
+                    <div id="section1" class="col-md-4"></div>
+                    <div id="section2" class="col-md-4"></div>
+                    <div id="section3" class="col-md-4"></div>
+                </div>
+                <div class="footer"></div>
+            </div>
+        </script>
+        <script type="template" id="jumbotron">
+            <h1>Testing <small>this is a test</small></h1>
+            <p class="lead"><a href="#editor">Go to Editor</a></p>
+        </script>
+        <script type="template" id="jumbotron2">
+            <h1>22222222 <small>this is a test</small></h1>
+            <p class="lead"><a href="#">Go Back to Index</a></p>
+        </script>
+        <script type="template" id="section-1">
+            <h3>title1</h3>
+            <hr>
+            <p>this is some example text.</p>
+        </script>
+        <script type="template" id="section-2">
+            <h3>title2</h3>
+            <hr>
+            <p>this is some example text.</p>
+        </script>
+        <script type="template" id="section-3">
+            <h3>title3</h3>
+            <hr>
+            <p>this is some example text.</p>
+        </script>
+        <script type="template" id="footer">
+            <ul class="list-unstyled list-inline">
+                <li><i class="fa fa-facebook"></i></li>
+                <li><i class="fa fa-twitter"></i></li>
+            </ul>
+            <span class="pull-right">
+                &copy; 2014
+            </span>
+        </script>
+	</body>
+</html>
