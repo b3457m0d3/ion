@@ -15,10 +15,12 @@ require.config({
         "lodash"       : "ion/Library/lodash",
         "us-string"    : "ion/Library/underscore-string",
         "mettle"       : "ion/Library/backbone",
+        "bbq"          : "ion/Library/bbq",
+        "Velocity"     : "ion/Library/Velocity",
+        "Velocity.ui"  : "ion/Library/Velocity-ui",
         // custom extended versions for ion
           "underscore" : "ion/Library/underscore",
           "backbone"   : "ion/Library/mettle",
-          //"Stack"      : "ion/Library/Stack",
         //Helpers =========================================================================================
         "us-helpers"   : "ion/Helper/template-helpers",
         "Index"        : "ion/Helper/Index",
@@ -31,7 +33,7 @@ require.config({
 
         //################################################################# Backbone Classes #####################
         //== controllers
-        "Main"          : "ion/Controller/Main",
+        "Main"         : "ion/Controller/Main",
         //== models
         "IndexModel"   : "ion/Model/IndexModel",
         "EditorModel"  : "ion/Model/EditorModel",
@@ -43,6 +45,8 @@ require.config({
         'mettle'       : { deps: ["jquery","underscore"], exports: 'Backbone' },
         'Controller'   : ['backbone','underscore'],
         'us-string'    : ['lodash'],
+        'Velocity'     : ['jquery'],
+        'Velocity.ui'  : ['Velocity']
         //"mCScroll"     : ['jquery']
     }
 });

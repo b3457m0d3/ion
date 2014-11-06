@@ -5,20 +5,23 @@
 		<title>Backbone.js + RequireJS + i0n</title>
 		<link rel="stylesheet" href="css/bootstrap.css">
         <style>
-            .viewPort { 
+            .viewPort {
                 position:relative;
                 overflow-x:hidden;
-                height: 400px; 
+                height: 400px;
                 width: 600px!important;
-                border:1px solid #000; 
+                border:1px solid #000;
             }
             #index {background: #ddd;}
             #editor {background: #14c96f;}
             .page {
+                overflow:hidden;
                 position: absolute;
                 top: 0px;
-                right: 0px;
+                right: -100%;
                 bottom: 0;
+                height:100%;
+                width:100%;
             }
         </style>
 	</head>
@@ -47,11 +50,13 @@
         <script type="template" id="section-1">
             <h3>title1</h3>
             <hr>
+            <input type="checkbox" id="checkme">
             <p>this is some example text.</p>
         </script>
         <script type="template" id="section-2">
             <h3>title2</h3>
             <hr>
+			<input type='text' id='typehere'>
             <p>this is some example text.</p>
         </script>
         <script type="template" id="section-3">

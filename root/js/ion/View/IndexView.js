@@ -7,18 +7,26 @@ define(["jquery","underscore","backbone"], function($,_,Backbone){
             template: '#layout1',
             views: {
                 '.jumbotron': new Backbone.Layout({ template:'#jumbotron' }),
-                '#section1': new Backbone.Layout({ template:'#section-1' }),
-                '#section2': new Backbone.Layout({ template:'#section-2' }),
-                '#section3': new Backbone.Layout({ template:'#section-3' }),
+                '#section1' : new Backbone.Layout({ template:'#section-1' }),
+                '#section2' : new Backbone.Layout({ template:'#section-2' }),
+                '#section3' : new Backbone.Layout({ template:'#section-3' }),
                 '.footer'   : new Backbone.Layout({ template:'#footer' })
             },
+            events: {},
+            bonds: [{ el: '#checkme', attr: 'checked', events: 'click', set: function(){
+                    this.model.toggle('checked');
+                }
+            },{ el: '#typehere', attr: 'text', events: 'keydown', set: function(event){
+                    this.model.set({text: $(event.currentTarget).val()});
+                }
+            }],
 			initialize: function(options){
-				var self = this;
                 this.model = options.model;
 			},
-            afterRender: function(){  
+            afterRender: function(){
                 this.$el.appendTo('.viewPort');
                 this.delegateEvents();
+                this.bond();
             }
 		})
 	);
