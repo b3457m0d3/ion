@@ -539,21 +539,6 @@ define(["mettle","Velocity","Velocity.ui"], function(Backbone,Velocity) {
     };
     _.extend(Backbone.Layout.prototype, defaultOptions);
     _.extend(Backbone.Layout.prototype,{
-        newEvents:       function(trigger,element,handler){
-            trigger = (!_.isArray(trigger))?[trigger]:trigger;
-            element = (!_.isArray(element))?[element]:element;
-            handler = (!_.isArray(handler))?[handler]:handler;
-            if(trigger.length == element.length && element.length == handler.length){
-                var events = _.clone(this.events) || {};
-                var eventKeys = [];
-                for (var i in trigger) eventKeys[i] = trigger[i]+' '+element[i];
-                _.extend(events,_.object(eventKeys,handler));
-                this.events = events;
-                this.delegateEvents();
-            } else {
-                _.log('arguments dont match');
-            }
-        },
         bond:            function(bonds){
             bonds = bonds || {};
 			bonds = _.extend(this.bonds,bonds);
