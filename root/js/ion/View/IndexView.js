@@ -12,14 +12,10 @@ define(["jquery","underscore","backbone"], function($,_,Backbone){
                 '#section3' : new Backbone.Layout({ template:'#section-3' }),
                 '.footer'   : new Backbone.Layout({ template:'#footer' })
             },
-            events: {},
-            bonds: [{ el: '#checkme', attr: 'checked', events: 'click', set: function(){
-                    this.model.toggle('checked');
-                }
-            },{ el: '#typehere', attr: 'text', events: 'keydown', set: function(event){
-                    this.model.set({text: $(event.currentTarget).val()});
-                }
-            }],
+            bonds: {
+                'check #checkme': 'checked',
+                'value #typehere': 'text'
+            },
 			initialize: function(options){
                 this.model = options.model;
 			},
