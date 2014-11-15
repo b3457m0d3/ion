@@ -1,20 +1,23 @@
 define(["jquery","underscore","backbone"], function($,_,Backbone){
     var IndexView = {};
-	IndexView.Layout = Backbone.Layout.extend(
+	IndexView.Layout = Backbone.Ion.extend(
 		_.extend({
             id: 'index',
             className: 'page',
             template: '#layout1',
             views: {
-                '.jumbotron': new Backbone.Layout({ template:'#jumbotron' }),
-                '#section1' : new Backbone.Layout({ template:'#section-1' }),
-                '#section2' : new Backbone.Layout({ template:'#section-2' }),
-                '#section3' : new Backbone.Layout({ template:'#section-3' }),
-                '.footer'   : new Backbone.Layout({ template:'#footer' })
+                '.jumbotron': new Backbone.Ion({ template:'#jumbotron' }),
+                '#section1' : new Backbone.Ion({ template:'#section-1' }),
+                '#section2' : new Backbone.Ion({ template:'#section-2' }),
+                '#section3' : new Backbone.Ion({ template:'#section-3' }),
+                '.footer'   : new Backbone.Ion({ template:'#footer' })
             },
-            bonds: {
-                'check #checkme': 'checked',
+            bonds: { // view-model bindings syntax: 'property selector':'attribute'
+                'checked #checkme': 'checked',
                 'value #typehere': 'text'
+            },
+            events: { // global events automagically handle listenTo statement
+                "global test":"test"
             },
 			initialize: function(options){
                 this.model = options.model;
@@ -23,6 +26,10 @@ define(["jquery","underscore","backbone"], function($,_,Backbone){
                 this.$el.appendTo('.viewPort');
                 this.delegateEvents();
                 this.bond();
+                Backbone.trigger('test','fdgjldfkjgldfkjgdlkfg');
+            },
+            test: function(val){
+                _.log(val);
             }
 		})
 	);

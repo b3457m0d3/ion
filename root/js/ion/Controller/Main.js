@@ -21,8 +21,8 @@ define(["jquery","underscore","backbone","Index","Editor","Controller"],
                 * });
                 */
                 this.trans = {
-                    in: new Backbone.Mercury({}),
-                    out: new Backbone.Mercury({})
+                    in: new Backbone.Hg({}),
+                    out: new Backbone.Hg({})
                 };
             },
             onBeforeRoute: function(){},

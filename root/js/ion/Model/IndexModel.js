@@ -5,7 +5,7 @@ define(["jquery","underscore","backbone"], function($, _, Backbone){
 				id:       _.uniqueId('index_'),
 				el:       null,
 				views:    null,
-                checked:  false
+                checked:  false,
 			},
 			initialize: function(){
                 this.log('bienvenue');
@@ -16,5 +16,13 @@ define(["jquery","underscore","backbone"], function($, _, Backbone){
             }
 		})
 	);
+	//define association types
+	var Flag   = Backbone.Model.extend({ /* ... */ }),
+		City   = Backbone.Model.extend({ /* ... */ }),
+		Cities = Backbone.Collection.extend({ model: City });
+	Backbone.associate(IndexModel,{//model (hasOne) : collection (hasMany)
+		flag   : { type: Flag   },
+		cities : { type: Cities }
+	});
 	return IndexModel;
 });

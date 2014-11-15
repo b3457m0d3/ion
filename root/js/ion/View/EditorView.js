@@ -1,5 +1,5 @@
 define(["jquery","underscore","backbone"], function($,_,Backbone){
-	var EditorView = Backbone.Layout.extend(
+	var EditorView = Backbone.Ion.extend(
 		_.extend({
             id: 'editor',
             className: 'page',
@@ -14,19 +14,19 @@ define(["jquery","underscore","backbone"], function($,_,Backbone){
                 this.delegateEvents();
 			},
 			views: {
-				'.jumbotron': new Backbone.Layout({
+				'.jumbotron': new Backbone.Ion({
 					template: '#jumbotron2'
 				}),
-				'#section1': new Backbone.Layout({
+				'#section1': new Backbone.Ion({
 					template: '#section-1'
 				}),
-				'#section2': new Backbone.Layout({
+				'#section2': new Backbone.Ion({
 					template: '#section-2'
 				}),
-				'#section3': new Backbone.Layout({
+				'#section3': new Backbone.Ion({
 					template: '#section-3'
 				}),
-				'.footer': new Backbone.Layout({
+				'.footer': new Backbone.Ion({
 					template: '#footer'
 				})
 			}
@@ -34,4 +34,3 @@ define(["jquery","underscore","backbone"], function($,_,Backbone){
 	);
 	return EditorView;
 });
-
