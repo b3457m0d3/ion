@@ -1,17 +1,21 @@
 define(["jquery","underscore","backbone"], function($,_,Backbone){
 	var EditorView = Backbone.Ion.extend(
 		_.extend({
-            id: 'editor',
-            className: 'page',
+			id: 'editor',
+			className: 'page',
 			template: '#layout1',
 			initialize: function(options){
 				var self = this;
 				_.log('new EditorView created');
-                this.model = options.model;
+				this.model = options.model;
 			},
 			afterRender: function(){
-                this.$el.appendTo('.viewPort');
-                this.delegateEvents();
+				this.$el.appendTo('.viewPort');
+				this.delegateEvents();
+			},
+			events: {
+				"transition in": new Backbone.Hg({}),
+				"transition out": new Backbone.Hg({})
 			},
 			views: {
 				'.jumbotron': new Backbone.Ion({

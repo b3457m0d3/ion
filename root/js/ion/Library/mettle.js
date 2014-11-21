@@ -10,9 +10,16 @@ define(["mettle","bbq","Velocity","Velocity.ui"], function(Backbone,bbq,Velocity
             return this;
         }
         _.each(events, function(handler, event) {
-            var match = event.match(/^global\s(.*)/);
-            if (match) {
-                this.listenTo(this.globalEventBus, match[1], this[handler]);
+            var globals = event.match(/^global\s(.*)/);
+            var transitions = event.match(/^transition\s(.*)/);
+            if (globals) {
+                this.listenTo(this.globalEventBus, globals[1], this[handler]);
+            }
+            if (transitions) {
+                var direction = _.last(_.words(event));
+                _.log(direction);
+                this.transitions = this.transitions || {};
+                this.transitions[direction] = handler;
             }
         }, this);
         return this; //original.call(this, events);
@@ -594,96 +601,7 @@ define(["mettle","bbq","Velocity","Velocity.ui"], function(Backbone,bbq,Velocity
             return _.bind(cancelAnimationFrame, window);
         })()
     });
-    var _super = function (self, method, args){
-        if(_.has(self,method)) return self[method].apply(self,args);
-    },
-    _split = function (str) {
-        if (str.indexOf('!.') === -1) {
-            return str.split('.');
-        }
-        var res = [], length, _length, l, last, s, i, j;
-        str = str.split('!.');
-        length = str.length;
-        for (i = 0; i < length; i++) {
-            s = str[i].split('.');
-            _length = s.length;
-            if (last !== undefined) {
-                last += '.' + s[0];
-
-                if (_length > 1) {
-                    res.push(last);
-                } else {
-                    if (i + 1 === length) {
-                        res.push(last);
-                    }
-                    continue;
-                }
-                j = 1;
-            } else {
-                j = 0;
-            }
-            if (i + 1 < length) {
-                l = _length - 1;
-                last = s[_length - 1];
-            } else {
-                l = _length;
-            }
-            for (; j < l; j++) {
-                res.push(s[j]);
-            }
-        }
-        return res;
-    },
-    getPath = function (path, obj) {
-        var p, i, l;
-        if (typeof path === 'string') {
-            path = _split(path);
-        }
-        for (i = 0, l = path.length; i < l; i++) {
-            p = path[i];
-            if (obj.hasOwnProperty(p)) {
-                obj = obj[p];
-            } else {
-                if (l > i + 1) {
-                    throw new Error('can\'t get "' + path[i + 1] + '" of "' + p + '", "' + p +'" is undefined');
-                } else {
-                    return undefined;
-                }
-            }
-        }
-        return obj;
-    },
-    deletePath = function (path, obj) {
-        var p;
-        for (var i = 0, l = path.length; i < l; i++) {
-            p = path[i];
-            if (i + 1 === l) {
-                delete obj[p];
-            } else {
-                if (obj.hasOwnProperty(p)) {
-                    obj = obj[p];
-                } else {
-                    break;
-                }
-            }
-        }
-    },
-    splitModelAttr = function (modelAttr) {
-        var parsed = modelAttr.match(/^(?:!\.|[^.])+/), model, attr;
-        try {
-            model = parsed[0];
-            attr = modelAttr.slice(model.length + 1);
-            if (!attr.length || !model.length) {
-                throw '';
-            }
-        } catch (e) {
-            throw new Error('wrong binging data"' + modelAttr + '"');
-        }
-        return {
-            model: model,attr: attr
-        };
-    },
-    Computed = function (data, name, model) {
+    var Computed = function (data, name, model) {
         this.name = name;
         if (typeof data === 'function') {
             this.get = function () {return data.apply(model);};
@@ -772,11 +690,11 @@ define(["mettle","bbq","Velocity","Velocity.ui"], function(Backbone,bbq,Velocity
             if (attr in computeds) {
                 return computeds[attr].get();
             }
-            var path = _split(attr);
+            var path = _.split(attr);
             if (path.length === 1) {
                 return this.attributes[path[0]];
             } else {
-                return getPath(path, this.attributes);
+                return _.getPath(path, this.attributes);
             }
         },
         set:             function (key, val, options) {
@@ -838,8 +756,8 @@ define(["mettle","bbq","Velocity","Velocity.ui"], function(Backbone,bbq,Velocity
             for (attr in attrs) {
                 if (attrs.hasOwnProperty(attr)) {
                     val = attrs[attr];
-                    path = _split(attr);
-                    if (!_.isEqual(getPath(path, current), val)) {
+                    path = _.split(attr);
+                    if (!_.isEqual(_.getPath(path, current), val)) {
                         escapedPath = path.slice();
                         for (i = 0; i < escapedPath.length; i++) {
                             escapedPath[i] = escapedPath[i].replace(/\./g, '!.');
@@ -851,13 +769,13 @@ define(["mettle","bbq","Velocity","Velocity.ui"], function(Backbone,bbq,Velocity
                             val: val
                         });
                     }
-                    if (!_.isEqual(getPath(path, prev), val)) {
+                    if (!_.isEqual(_.getPath(path, prev), val)) {
                         this.changed[attr] = val;
                     } else {
                         delete this.changed[attr];
                     }
                     if (unset && (attr in realAttrs)) {
-                        deletePath(path, current);
+                        _.deletePath(path, current);
                     } else {
                         this._setPath(path, val);
                     }
@@ -980,7 +898,7 @@ define(["mettle","bbq","Velocity","Velocity.ui"], function(Backbone,bbq,Velocity
                     deps = computed.deps;
                     if (deps instanceof Array) {
                         for (i = 0, l1 = deps.length; i < l1; i++) {
-                            depArr = _split(deps[i]);
+                            depArr = _.split(deps[i]);
                             dep = 'change:' + depArr[0].replace(/\./g, '!.');
 
                             for (j = 0, l2 = depArr.length; j < l2; j++) {
@@ -1071,7 +989,7 @@ define(["mettle","bbq","Velocity","Velocity.ui"], function(Backbone,bbq,Velocity
         }
     }));
     Backbone.Hg    = Backbone.Model.extend(_.extend({
-        defaults: { status: 'not started',view: null },
+        defaults: { status: 'not started', view: null },
         initialize:     function(options){
             this.listenTo(this,'change:status',this.update);
             this.listenTo(this,'end',this.fin);
@@ -1080,10 +998,11 @@ define(["mettle","bbq","Velocity","Velocity.ui"], function(Backbone,bbq,Velocity
         start:          function(view,dir){
             this.set({status:'started',view:view});
             var def = $.Deferred(), Hg = this, sequence = Hg.sequence();
-            if(_.isEmpty(sequence)) Hg.animate(view,{right:(dir==='in')?0:'100%'}).then(function(){
-                def.resolveWith(view,[view]);
-            });
-            else this.run(sequence).then(function(){ def.resolveWith(view,[view]); });
+            if(_.isEmpty(sequence)) {
+                Hg.animate(view,{right:(dir==='in')?0:'100%'}).then(function(){
+                    def.resolveWith(view,[view]);
+                });
+            } else this.run(sequence).then(function(){ def.resolveWith(view,[view]); });
             return def.promise();
         },
         sequence:       function(active,next,steps){},
@@ -1176,19 +1095,19 @@ define(["mettle","bbq","Velocity","Velocity.ui"], function(Backbone,bbq,Velocity
         install:      function(mold,index){
             this.foundry.insert(mold,index);
         },
-        goto:         function(name,transIn,transOut){
+        goto:         function(name){
             var self = this;
             var next = this.cast(name);
 		    if (!_.isNull(this.active)) {
                 var prev = this.cast(this.active);
-                transOut.start(prev).then(function(){
+                prev.transitions.out.start(prev).then(function(){
                     self.previous = this.id;
                     _.log('trans out');
                 });
 		    }
             next.render().then(function(){
                 this.$el.append(next.$el);
-                transIn.start(this,'in').then(function(){
+                this.transitions.in.start(this,'in').then(function(){
                     self.active = this.id;
                     _.log(self.active+': trans in');
                     self.def.resolveWith(this,[this]);

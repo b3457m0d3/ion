@@ -1,5 +1,5 @@
-define(["jquery","underscore","backbone","Mold"], function($, _, Backbone,Mold){
-	var EditorModel = Mold.extend(
+define(["jquery","underscore","backbone","Mold"], function($, _, Backbone){
+	var EditorModel = Backbone.Mold.extend(
 		_.extend({
 			defaults:{
 				id:       _.uniqueId('index_'),

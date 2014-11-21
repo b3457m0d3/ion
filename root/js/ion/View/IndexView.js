@@ -1,7 +1,7 @@
 define(["jquery","underscore","backbone"], function($,_,Backbone){
     var IndexView = {};
-	IndexView.Layout = Backbone.Ion.extend(
-		_.extend({
+    IndexView.Layout = Backbone.Ion.extend(
+        _.extend({
             id: 'index',
             className: 'page',
             template: '#layout1',
@@ -17,21 +17,22 @@ define(["jquery","underscore","backbone"], function($,_,Backbone){
                 'value #typehere': 'text'
             },
             events: { // global events automagically handle listenTo statement
-                "global test":"test"
+                "global test":"test",
+                'transition in': new Backbone.Hg({}),
+                'transition out': new Backbone.Hg({})
             },
-			initialize: function(options){
+            initialize: function(options){
                 this.model = options.model;
-			},
+            },
             afterRender: function(){
                 this.$el.appendTo('.viewPort');
-                this.delegateEvents();
                 this.bond();
                 Backbone.trigger('test','fdgjldfkjgldfkjgdlkfg');
             },
             test: function(val){
                 _.log(val);
             }
-		})
-	);
-	return IndexView;
+        })
+    );
+    return IndexView;
 });

@@ -115,7 +115,93 @@ define("underscore",["jquery","lodash", "us-string"], function($,_) {
                 _.each(extensions, _.partial(_.wrapMethod, self));
                 _.filterAssociates(self, self.attributes, options);
                 return original.call(self, attrs, options);
-            }
+            },
+            /*splitModelAttr  function (modelAttr) {
+                var parsed = modelAttr.match(/^(?:!\.|[^.])+/), model, attr;
+                try {
+                    model = parsed[0];
+                    attr = modelAttr.slice(model.length + 1);
+                    if (!attr.length || !model.length) {
+                        throw '';
+                    }
+                } catch (e) {
+                    throw new Error('wrong binging data"' + modelAttr + '"');
+                }
+                return {
+                    model: model,attr: attr
+                };
+            },*/
+            deletePath: function (path, obj) {
+                var p;
+                for (var i = 0, l = path.length; i < l; i++) {
+                    p = path[i];
+                    if (i + 1 === l) {
+                        delete obj[p];
+                    } else {
+                        if (obj.hasOwnProperty(p)) {
+                            obj = obj[p];
+                        } else {
+                            break;
+                        }
+                    }
+                }
+            },
+            split: function (str) {
+                if (str.indexOf('!.') === -1) {
+                    return str.split('.');
+                }
+                var res = [], length, _length, l, last, s, i, j;
+                str = str.split('!.');
+                length = str.length;
+                for (i = 0; i < length; i++) {
+                    s = str[i].split('.');
+                    _length = s.length;
+                    if (last !== undefined) {
+                        last += '.' + s[0];
+
+                        if (_length > 1) {
+                            res.push(last);
+                        } else {
+                            if (i + 1 === length) {
+                                res.push(last);
+                            }
+                            continue;
+                        }
+                        j = 1;
+                    } else {
+                        j = 0;
+                    }
+                    if (i + 1 < length) {
+                        l = _length - 1;
+                        last = s[_length - 1];
+                    } else {
+                        l = _length;
+                    }
+                    for (; j < l; j++) {
+                        res.push(s[j]);
+                    }
+                }
+                return res;
+            },
+            getPath: function (path, obj) {
+                var p, i, l;
+                if (typeof path === 'string') {
+                    path = _.split(path);
+                }
+                for (i = 0, l = path.length; i < l; i++) {
+                    p = path[i];
+                    if (obj.hasOwnProperty(p)) {
+                        obj = obj[p];
+                    } else {
+                        if (l > i + 1) {
+                            throw new Error('can\'t get "' + path[i + 1] + '" of "' + p + '", "' + p +'" is undefined');
+                        } else {
+                            return undefined;
+                        }
+                    }
+                }
+                return obj;
+            },
         })
     );
     return _;
