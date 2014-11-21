@@ -10,10 +10,10 @@ define(["mettle","bbq","Velocity","Velocity.ui"], function(Backbone,bbq,Velocity
             return this;
         }
         _.each(events, function(handler, event) {
-            var globals = event.match(/^global\s(.*)/);
+            var listeners = event.match(/^listenTo\s(.*)/);
             var transitions = event.match(/^transition\s(.*)/);
-            if (globals) {
-                this.listenTo(this.globalEventBus, globals[1], this[handler]);
+            if (listeners) {
+                this.listenTo(this.globalEventBus, listeners[1], this[handler]);
             }
             if (transitions) {
                 var direction = _.last(_.words(event));
@@ -27,7 +27,7 @@ define(["mettle","bbq","Velocity","Velocity.ui"], function(Backbone,bbq,Velocity
     ViewProto.undelegateEvents = _.wrap(ViewProto.undelegateEvents, function(original, events) {
         var events = _.keys(this.events)
         _.each(events, function(event){
-            if ( event.match(/global /) ){
+            if ( event.match(/listenTo /) ){
                 this.globalEventBus.off( event );
             }
         }, this);

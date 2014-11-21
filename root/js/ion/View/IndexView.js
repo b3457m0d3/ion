@@ -17,8 +17,8 @@ define(["jquery","underscore","backbone"], function($,_,Backbone){
                 'value #typehere': 'text'
             },
             events: { // global events automagically handle listenTo statement
-                "global test":"test",
-                'transition in': new Backbone.Hg({}),
+                "listenTo test" : "test",
+                'transition in' : new Backbone.Hg({}),
                 'transition out': new Backbone.Hg({})
             },
             initialize: function(options){
