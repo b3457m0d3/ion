@@ -11,10 +11,9 @@ define(["jquery","underscore","backbone"], function($,_,Backbone){
 			},
 			afterRender: function(){
 				this.$el.appendTo('.viewPort');
-				this.delegateEvents();
 			},
 			events: {
-				"transition in": new Backbone.Hg({}),
+				"transition in": new Backbone.Hg({state:'in'}),
 				"transition out": new Backbone.Hg({})
 			},
 			views: {

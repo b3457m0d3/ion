@@ -12,16 +12,16 @@ define(["jquery","underscore","backbone"], function($,_,Backbone){
                 '#section3' : new Backbone.Ion({ template:'#section-3' }),
                 '.footer'   : new Backbone.Ion({ template:'#footer' })
             },
-            bonds: { // view-model bindings syntax: 'property selector':'attribute'
+            bonds: { // view-model binding syntax: 'property selector':'attribute'
                 'checked #checkme': 'checked',
                 'value #typehere': 'text'
             },
-            events: { // global events automagically handle listenTo statement
-                "listenTo test" : "test",
-                'transition in' : new Backbone.Hg({}),
-                'transition out': new Backbone.Hg({})
+            events: { // use keywords like 'listenTo' & 'transition'
+                "listenTo test"  : "fire",
+                'transition out' : {  },
+                'transition in'  : {  }
             },
-            initialize: function(options){
+            initialize: function(options){// look ma, no listeners!
                 this.model = options.model;
             },
             afterRender: function(){
@@ -29,7 +29,7 @@ define(["jquery","underscore","backbone"], function($,_,Backbone){
                 this.bond();
                 Backbone.trigger('test','fdgjldfkjgldfkjgdlkfg');
             },
-            test: function(val){
+            fire: function(val){
                 _.log(val);
             }
         })

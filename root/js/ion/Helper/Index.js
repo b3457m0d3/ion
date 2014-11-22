@@ -3,7 +3,7 @@ define(["jquery","underscore","backbone","IndexModel","IndexView"],
     var Flag = Backbone.Model.extend({ /* ... */ }),
         City = Backbone.Model.extend({ /* ... */ }),
         Cities = Backbone.Collection.extend({ model: City });
-    Backbone.associate(IndexModel,{
+    Backbone.entangle(IndexModel,{
         flag: { type: Flag }, //Flag is a model (hasOne)
         cities: { type: Cities } // Cities is a collection (hasMany)
     });
